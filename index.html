@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b0d12">
 <title>Circle VS</title>
+<meta name="description" content="Circle VS is a free browser arena battler: pick one of 9 circle fighters with unique weapons and watch them bounce, clash and knock each other out. Play vs friends or the AI.">
 <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 <meta name="google-adsense-account" content="ca-pub-6053857739577426">
 <script>
@@ -52,6 +53,9 @@
   h3{margin:0 0 12px;font:700 15px/1.1 var(--cond);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
 
   .credit{position:fixed;right:10px;bottom:6px;font-size:12px;color:var(--muted);opacity:.7;display:flex;align-items:center;gap:5px;letter-spacing:.04em;pointer-events:none;z-index:5}
+  .siteLinks{margin-top:14px;font-size:14px;color:var(--muted)}
+  .siteLinks a{color:var(--muted)}
+  .siteLinks a:hover{color:var(--text)}
   .credit svg{width:13px;height:13px;display:block}
   .screen{width:min(1280px,100%);flex:1;display:flex;flex-direction:column;gap:16px;min-height:0}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
@@ -228,6 +232,8 @@
     <button class="mbtn" id="modeAi"><b>Practice vs AI</b><small>Beat AI rivals one after another. Every round they come back with more HP.</small></button>
     <button class="mbtn" id="modeOpt"><b>Options</b><small>Sound and combat balance.</small></button>
     <div class="best" id="bestLine"></div>
+    <nav class="siteLinks hidden" id="siteLinks"><a href="/how-to-play">How to play</a> · <a href="/about">About</a> · <a href="/privacy">Privacy</a></nav>
+    <script>/* links al resto del sitio: solo en playcirclevs.com (no en CrazyGames) */ if (/(^|\.)playcirclevs\.com$|\.pages\.dev$/.test(location.hostname)) document.getElementById('siteLinks').classList.remove('hidden');</script>
     <div class="ad ad-rect" data-ad-slot="menu">Advertisement<small>300 x 250</small></div> <!-- ANUNCIO: reemplazar por el código del proveedor -->
   </div>
 </section>
