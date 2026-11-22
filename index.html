@@ -161,6 +161,7 @@
   .ad-sky{width:160px;height:600px}
   .ad-mob{width:320px;height:50px;display:none}
   body.noads .ad{display:none !important}
+  body.noads .gameWrap{grid-template-columns:minmax(0,1fr)}
   .gameWrap{display:grid;grid-template-columns:160px minmax(0,1fr) 160px;gap:24px;align-items:start}
   .gameMain{display:flex;flex-direction:column;gap:14px;min-width:0}
 
@@ -205,7 +206,7 @@
   @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
 </head>
-<body>
+<body class="noads">
 <!-- ============ MENU ============ -->
 <section id="scrMenu" class="screen">
   <div class="stage" id="menuStage"><div class="stageTag" id="demoTag"></div></div>
@@ -337,7 +338,15 @@
   const cv = document.getElementById('c'); let ctx = cv.getContext('2d');
   const W = 400;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
-  cv.width = W * dpr; cv.height = W * dpr; ctx.scale(dpr, dpr);
+  // Resolución real del canvas = tamaño en pantalla x densidad de píxeles (nítido en cualquier pantalla)
+  function fitCanvas() {
+    const px = Math.max(W, Math.round((cv.clientWidth || W) * Math.min(3, window.devicePixelRatio || 1)));
+    if (cv.width !== px) { cv.width = px; cv.height = px; }
+    ctx.setTransform(px / W, 0, 0, px / W, 0, 0);
+  }
+  fitCanvas();
+  window.addEventListener('resize', fitCanvas);
+  new ResizeObserver(fitCanvas).observe(cv);
 
   const cfg = { hp:100, speed:400, swordDmg:5, drain:10, latch:2.5, spin:1, spearDmg:7, spearCd:2.5, rageDmg:9, rageCd:20, rageDur:5, divCd:10, harpDmg:1, harpCd:0.75, elecDmg:8, elecCd:6, shieldDmg:8, shieldCd:4, gunDmg:2, gunCd:3, aim:1 };  const GUN_PELLETS = 6, GUN_SPREAD = 0.55, GUN_SPEED = 520, GUN_RANGE = 260;
   const SHIELD_ARC = 0.8, SHIELD_SPEED = 560, SHIELD_RETURN = 680; // SHIELD_ARC: medio ángulo que cubre (radianes)
@@ -951,8 +960,8 @@
   // --------- dibujo ---------
   let matCv = null;
   function buildMat() { // lona del ring: azul marino, luz cenital y el logo impreso al centro
-    matCv = document.createElement('canvas'); matCv.width = W*dpr; matCv.height = W*dpr;
-    const g = matCv.getContext('2d'); g.scale(dpr, dpr);
+    matCv = document.createElement('canvas'); matCv.width = cv.width; matCv.height = cv.height;
+    const g = matCv.getContext('2d'); g.scale(cv.width / W, cv.width / W);
     g.fillStyle = '#18243d'; g.fillRect(0, 0, W, W);
     const l = g.createRadialGradient(W/2, W*0.42, 10, W/2, W/2, W*0.72);
     l.addColorStop(0, 'rgba(255,245,225,.16)'); l.addColorStop(.6, 'rgba(0,0,0,0)'); l.addColorStop(1, 'rgba(0,0,0,.38)');
@@ -969,7 +978,7 @@
     }
   }
   function drawArena() {
-    if (!matCv) buildMat();
+    if (!matCv || matCv.width !== cv.width) buildMat();
     ctx.drawImage(matCv, 0, 0, W, W);
   }
 
